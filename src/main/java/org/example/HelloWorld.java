@@ -19,19 +19,41 @@ public class HelloWorld {
 
    public static void main(String[] args) throws Exception {
       Server server = new Server(8080);
-      ContextHandler context = new ContextHandler("/");
-      context.setHandler(getBasicResourceHandler());
-
-      ServletContextHandler servletContext = new ServletContextHandler();
-      servletContext.setContextPath("/");
-      servletContext.addServlet(new ServletHolder(new TodosHttpServlet()), "/todo");
-
-      ContextHandlerCollection handlerCollection = new ContextHandlerCollection();
-      handlerCollection.setHandlers(new Handler[]{context, servletContext});
-
-      server.setHandler(handlerCollection);
+      SimpleHttpObject obj = new SimpleHttpObject();
+      server.setHandler(obj);
       server.start();
       server.join();
+   }
+
+   public static class SimpleHttpObject extends AbstractHandler{
+
+      private Handler[] handlers;
+      private ResourceHandler defaultResourceHandler;
+
+      public SimpleHttpObject(){
+          this.defaultResourceHandler = getBasicResourceHandler();
+      }
+      
+      public SimpleHttpObject(Handler... h){
+         this();
+         this.handlers = h;
+      }
+
+      @Override
+      public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
+         System.out.println("I am in handle; target is "+target);
+         if (baseRequest.isHandled()){
+             System.out.println("base request is handled!  Leavin .....");
+             return;
+         } else {
+             System.out.println("base is not handled! Let's do this!");
+             defaultResourceHandler.handle(target, baseRequest, request, response);
+             System.out.println(baseRequest.isHandled());
+             baseRequest.setHandled(true);
+         }
+         
+      }
+
    }
 
    public static ResourceHandler getBasicResourceHandler(){
