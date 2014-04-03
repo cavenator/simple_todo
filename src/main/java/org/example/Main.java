@@ -15,7 +15,7 @@ import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.server.handler.ResourceHandler;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 
-public class HelloWorld {
+public class Main {
 
    public static void main(String[] args) throws Exception {
       Server server = new Server(8080);
