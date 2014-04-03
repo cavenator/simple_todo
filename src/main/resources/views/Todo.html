@@ -1,0 +1,17 @@
+<!-- Replace divs with actual form once done -->
+<div class="span4"></div>
+<div class="span4" style="background-color: lightgrey;margin-top: 1.5em; margin-bottom:1em">
+   <form>
+     <fieldset>
+       <label>Title</label>
+       <input type="text" class="todo-title" placeholder="Type something…" value='<%= todo.title %>'>
+       <label>Description</label>
+       <textarea rows="6" class="todo-description" style='max-width:80%;' placeholder="Type something…"><%= todo.description %></textarea>
+       <div style='padding: 1em 0 1em 0'>
+         <button type="button" id="saveTodo" class="btn btn-primary">Save</button>
+         <button type="button" id="cancelTodo" class="btn btn-error">Cancel</button>
+      </div>
+     </fieldset>
+   </form>
+</div>
+<div class="span4"></div>
