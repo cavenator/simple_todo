@@ -19,7 +19,8 @@ public class HelloWorld {
 
    public static void main(String[] args) throws Exception {
       Server server = new Server(8080);
-      SimpleHttpObject obj = new SimpleHttpObject();
+      TodosHttpServlet todosServlet = new TodosHttpServlet("/todo");
+      SimpleHttpObject obj = new SimpleHttpObject(todosServlet);
       server.setHandler(obj);
       server.start();
       server.join();
@@ -27,31 +28,60 @@ public class HelloWorld {
 
    public static class SimpleHttpObject extends AbstractHandler{
 
-      private Handler[] handlers;
+      private AbstractHttpServlet[] servlets;
       private ResourceHandler defaultResourceHandler;
 
       public SimpleHttpObject(){
           this.defaultResourceHandler = getBasicResourceHandler();
       }
       
-      public SimpleHttpObject(Handler... h){
+      public SimpleHttpObject(AbstractHttpServlet... h){
          this();
-         this.handlers = h;
+         this.servlets = h;
       }
 
       @Override
       public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
          System.out.println("I am in handle; target is "+target);
+
+         for (AbstractHttpServlet servlet: servlets){
+            if (target.equals(servlet.getPath())){
+               System.out.println("path is matched");
+               invoke(request, response, servlet);
+               baseRequest.setHandled(true);
+            }
+         }
+
          if (baseRequest.isHandled()){
              System.out.println("base request is handled!  Leavin .....");
              return;
          } else {
              System.out.println("base is not handled! Let's do this!");
              defaultResourceHandler.handle(target, baseRequest, request, response);
-             System.out.println(baseRequest.isHandled());
-             baseRequest.setHandled(true);
+             if (!baseRequest.isHandled()){
+                 response.setContentType("text/html");
+                 response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                 response.getWriter().println("Unable to find path: "+target);
+                 baseRequest.setHandled(true);
+             }
          }
          
+      }
+
+      private void invoke(HttpServletRequest request, HttpServletResponse response, AbstractHttpServlet servlet) throws IOException, ServletException {
+         System.out.println("Inside invoke method");
+         String method = request.getMethod();
+         if (method.equals("GET")){
+             servlet.get(request, response);
+         } else if (method.equals("PUT")){
+             servlet.put(request, response);
+         } else if (method.equals("POST")){
+             servlet.post(request, response);
+         } else if (method.equals("DELETE")){
+             servlet.delete(request, response);
+         } else {
+             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+         }
       }
 
    }

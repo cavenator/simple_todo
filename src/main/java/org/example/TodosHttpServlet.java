@@ -11,13 +11,16 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.Collections;
 
-public class TodosHttpServlet extends HttpServlet {
+public class TodosHttpServlet extends AbstractHttpServlet {
 
       private Map<Integer, TodoDto> inMemoryMap = new HashMap<Integer, TodoDto>();
 
-      public TodosHttpServlet(){}
+      public TodosHttpServlet(String path){
+          this.path = path;
+      }
 
-      public TodosHttpServlet(Map<Integer, TodoDto> map){
+      public TodosHttpServlet(String path, Map<Integer, TodoDto> map){
+          this(path);
           this.inMemoryMap = map;
       }
 
