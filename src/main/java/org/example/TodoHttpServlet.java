@@ -12,17 +12,22 @@ import java.util.HashMap;
 import java.util.Collections;
 
 //path = /todo/{id}
-public class TodoHttpServlet extends HttpServlet {
+public class TodoHttpServlet extends AbstractHttpServlet {
 
       private Map<Integer, TodoDto> inMemoryMap = new HashMap<Integer, TodoDto>();
 
-      public TodoHttpServlet(Map<Integer, TodoDto> map){
+      public TodoHttpServlet(String path){
+         super(path);
+      }
+
+      public TodoHttpServlet(String path, Map<Integer, TodoDto> map){
+          this(path);
           this.inMemoryMap = map;
       }
 
       protected void doGet( HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
           ErrorDto errorDto = new ErrorDto();
-          String id = request.getParameter("id");  //need to pass along the variable somehow
+          String id = pathVars.get("id");
           Integer numId;
           try {
              numId = Integer.parseInt(id);

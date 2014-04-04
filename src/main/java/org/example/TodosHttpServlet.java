@@ -16,7 +16,7 @@ public class TodosHttpServlet extends AbstractHttpServlet {
       private Map<Integer, TodoDto> inMemoryMap = new HashMap<Integer, TodoDto>();
 
       public TodosHttpServlet(String path){
-          this.path = path;
+         super(path);
       }
 
       public TodosHttpServlet(String path, Map<Integer, TodoDto> map){

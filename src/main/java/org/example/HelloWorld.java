@@ -14,13 +14,17 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.server.handler.ResourceHandler;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
+import java.util.Map;
+import java.util.HashMap;
 
 public class HelloWorld {
 
    public static void main(String[] args) throws Exception {
       Server server = new Server(8080);
-      TodosHttpServlet todosServlet = new TodosHttpServlet("/todo");
-      SimpleHttpObject obj = new SimpleHttpObject(todosServlet);
+      final Map<Integer, TodoDto> inMemoryMap = new HashMap<Integer, TodoDto>();
+      TodosHttpServlet todosServlet = new TodosHttpServlet("/todo", inMemoryMap);
+      TodoHttpServlet todoServlet = new TodoHttpServlet("/todo/{id}", inMemoryMap);
+      SimpleHttpObject obj = new SimpleHttpObject(todosServlet, todoServlet);
       server.setHandler(obj);
       server.start();
       server.join();
@@ -30,6 +34,7 @@ public class HelloWorld {
 
       private AbstractHttpServlet[] servlets;
       private ResourceHandler defaultResourceHandler;
+      private ServletInvoker servletInvoker;
 
       public SimpleHttpObject(){
           this.defaultResourceHandler = getBasicResourceHandler();
@@ -38,19 +43,19 @@ public class HelloWorld {
       public SimpleHttpObject(AbstractHttpServlet... h){
          this();
          this.servlets = h;
+         this.servletInvoker = new ServletInvoker(h);
       }
 
       @Override
       public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
          System.out.println("I am in handle; target is "+target);
 
-         for (AbstractHttpServlet servlet: servlets){
-            if (target.equals(servlet.getPath())){
-               System.out.println("path is matched");
-               invoke(request, response, servlet);
-               baseRequest.setHandled(true);
-            }
+         boolean servletFound = servletInvoker.invokeServletWithPath(target, request, response);
+         if (servletFound){
+            baseRequest.setHandled(true);
+            return;
          }
+         
 
          if (baseRequest.isHandled()){
              System.out.println("base request is handled!  Leavin .....");
