@@ -15,9 +15,8 @@ define(['jquery','underscore','backbone','models/Todo','text!views/Todo.html'], 
          var title = this.$(".todo-title").val();
          var description= this.$(".todo-description").val();
          this.model.set({title: title, description: description});
-         console.log(this.model.url());
-         console.log(this.model.isNew());
-         this.model.save();
+         this.model.save({title: title, description: description},{async: false}).done(function(){ console.log("model is done saving!")});
+         console.log(this.model.toJSON());
          this.trigger('todoSaved', this.model);
       },
 

@@ -9,6 +9,7 @@ define(['jquery','underscore','backbone','text!views/ReadOnlyTodo.html'], functi
       },
 
       removeTodo: function(){
+         this.model.destroy({wait: true});
          this.remove();
          this.trigger("removeTodo", this.model);
       },

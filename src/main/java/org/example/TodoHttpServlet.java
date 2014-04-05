@@ -48,7 +48,7 @@ public class TodoHttpServlet extends AbstractHttpServlet {
 
       protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
           ErrorDto errorDto = new ErrorDto();
-          String id = request.getParameter("id");
+          String id = pathVars.get("id");
           Integer numId;
           try {
              numId = Integer.parseInt(id);

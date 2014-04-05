@@ -48,7 +48,6 @@ public class HelloWorld {
 
       @Override
       public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
-         System.out.println("I am in handle; target is "+target);
 
          boolean servletFound = servletInvoker.invokeServletWithPath(target, request, response);
          if (servletFound){
@@ -58,10 +57,8 @@ public class HelloWorld {
          
 
          if (baseRequest.isHandled()){
-             System.out.println("base request is handled!  Leavin .....");
              return;
          } else {
-             System.out.println("base is not handled! Let's do this!");
              defaultResourceHandler.handle(target, baseRequest, request, response);
              if (!baseRequest.isHandled()){
                  response.setContentType("text/html");
@@ -74,7 +71,6 @@ public class HelloWorld {
       }
 
       private void invoke(HttpServletRequest request, HttpServletResponse response, AbstractHttpServlet servlet) throws IOException, ServletException {
-         System.out.println("Inside invoke method");
          String method = request.getMethod();
          if (method.equals("GET")){
              servlet.get(request, response);

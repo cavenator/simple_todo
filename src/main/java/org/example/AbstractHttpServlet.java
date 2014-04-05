@@ -55,7 +55,6 @@ public abstract class AbstractHttpServlet extends HttpServlet {
             String part = parts[i];
             PathSegment segment = segments.get(i);
             if (segment.isPathVar()){
-               System.out.println(part + " is a path variable");
                String pathVar = part;
                pathVars.put(segment.getSegment(), pathVar);
             }

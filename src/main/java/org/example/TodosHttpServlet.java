@@ -36,6 +36,7 @@ public class TodosHttpServlet extends AbstractHttpServlet {
            inMemoryMap.put(dto.id, dto);
 	   response.setContentType("application/json;charset=utf-8");
 	   response.setStatus(HttpServletResponse.SC_CREATED);
+           response.getWriter().write(JsonUtil.toJson(dto));
       }
 
 
