@@ -1,22 +1,13 @@
-define(['jquery','underscore','backbone','text!views/TodoContainerView.html','views/Todo','views/ReadOnlyTodo','models/TodoCollection','models/Todo'],
-   function($,_,Backbone, htmlTemplate, TodoView, ReadOnlyTodo, TodoCollection,Todo){
+define(['jquery','underscore','backbone','text!views/TodoContainerView.html','views/Todo','views/ReadOnlyTodo','models/Todo'],
+   function($,_,Backbone, htmlTemplate, TodoView, ReadOnlyTodo, Todo){
       return Backbone.View.extend({
           initialize: function(){
-             this.collection = new TodoCollection()
-             this.collection.on("add", this.speakOut, this);
-             this.collection.on("reset", this.speakOut, this);
-             this.collection.on("remove", this.speakOut, this);
              return this;
           },
 
           events: {
              "click #add" : "addTodo",
              "click #clearAll": "clearAllTodos"
-          },
-
-          speakOut: function(todo){
-             console.log(todo.toJSON());
-             console.log(this.collection.length);
           },
 
           addTodo: function(e){
@@ -28,13 +19,11 @@ define(['jquery','underscore','backbone','text!views/TodoContainerView.html','vi
           },
 
           addToQueue: function(todo){
-             this.collection.add(todo);
              this.addReadOnlyView(todo);
              this.cancelTodo();
           },
 
           addReadOnlyView: function(todoModel){
-             console.log(todoModel.toJSON());
              var readOnlyView = new ReadOnlyTodo({model: todoModel});
              readOnlyView.on("removeTodo", this.removeTodo, this);
              this.$(".todos").append(readOnlyView.render().el);
@@ -66,13 +55,6 @@ define(['jquery','underscore','backbone','text!views/TodoContainerView.html','vi
 
           render: function(){
              this.$el.html(htmlTemplate);
-             var self = this;
-             this.collection.fetch().done(function(collection){
-                _.each(collection, function(todo){
-                   var model = new Todo(todo);
-                   self.addReadOnlyView(model);
-                });
-             });
              return this;
           }
       });

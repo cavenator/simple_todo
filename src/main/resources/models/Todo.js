@@ -3,9 +3,6 @@ define(['backbone'], function(Backbone){
        defaults: {
           "title": null,
           "description": null
-       },
-       urlRoot: function(){
-         return "/todo";
        }
    });
 });

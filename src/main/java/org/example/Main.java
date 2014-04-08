@@ -19,17 +19,7 @@ public class Main {
 
    public static void main(String[] args) throws Exception {
       Server server = new Server(8080);
-      ContextHandler context = new ContextHandler("/");
-      context.setHandler(getBasicResourceHandler());
-
-      ServletContextHandler servletContext = new ServletContextHandler();
-      servletContext.setContextPath("/");
-      servletContext.addServlet(new ServletHolder(new TodosHttpServlet()), "/todo");
-
-      ContextHandlerCollection handlerCollection = new ContextHandlerCollection();
-      handlerCollection.setHandlers(new Handler[]{context, servletContext});
-
-      server.setHandler(handlerCollection);
+      server.setHandler(getBasicResourceHandler());
       server.start();
       server.join();
    }
