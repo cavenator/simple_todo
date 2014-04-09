@@ -22,6 +22,26 @@
          <version>${jettyVersion}</version>
       </dependency>
       <dependency>
+          <groupId>org.httpobjects</groupId>
+          <artifactId>httpobjects</artifactId>
+         <version>0.5.0</version>
+      </dependency>
+      <dependency>
+         <groupId>org.httpobjects.jetty</groupId>
+         <artifactId>httpobjects-jetty-7-and-8</artifactId>
+         <version>0.5.0</version>
+      </dependency>
+      <dependency>
+         <groupId>org.httpobjects.servlet</groupId>
+         <artifactId>httpobjects-servlet</artifactId>
+         <version>0.5.0</version>
+      </dependency>
+      <dependency>
+         <groupId>org.httpobjects.jackson</groupId>
+         <artifactId>httpobjects-jackson</artifactId>
+         <version>0.5.0</version>
+      </dependency>
+      <dependency>
          <groupId>javax.servlet</groupId>
          <artifactId>servlet-api</artifactId>
 	 <version>2.5</version>

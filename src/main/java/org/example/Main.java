@@ -1,20 +1,18 @@
 package org.example;
 
-import org.eclipse.jetty.server.Server;
-import java.util.Map;
+import org.httpobjects.jetty.HttpObjectsJettyHandler;
+
 import java.util.HashMap;
+import java.util.Map;
 
 public class Main {
 
    public static void main(String[] args) throws Exception {
-      Server server = new Server(8080);
-      final Map<Integer, TodoDto> inMemoryMap = new HashMap<Integer, TodoDto>();
-      TodosHttpServlet todosServlet = new TodosHttpServlet("/todo", inMemoryMap);
-      TodoHttpServlet todoServlet = new TodoHttpServlet("/todo/{id}", inMemoryMap);
-      SimpleHttpObject obj = new SimpleHttpObject(todosServlet, todoServlet);
-      server.setHandler(obj);
-      server.start();
-      server.join();
+       Map<String, String> inMemoryMap = new HashMap<String, String>();
+       TodoResource todoResource = new TodoResource("/todo", inMemoryMap);
+       TodosResource todosResource = new TodosResource("/todo/{id}", inMemoryMap);
+       StaticResource staticResource = new StaticResource("/{path*}");
+       HttpObjectsJettyHandler.launchServer(8080, todoResource, todosResource, staticResource);
    }
 
 }
