@@ -3,20 +3,12 @@ define(['jquery','underscore','backbone','text!views/TodoContainerView.html','vi
       return Backbone.View.extend({
           initialize: function(){
              this.collection = new TodoCollection()
-             this.collection.on("add", this.speakOut, this);
-             this.collection.on("reset", this.speakOut, this);
-             this.collection.on("remove", this.speakOut, this);
              return this;
           },
 
           events: {
              "click #add" : "addTodo",
              "click #clearAll": "clearAllTodos"
-          },
-
-          speakOut: function(todo){
-             console.log(todo.toJSON());
-             console.log(this.collection.length);
           },
 
           addTodo: function(e){
@@ -34,7 +26,6 @@ define(['jquery','underscore','backbone','text!views/TodoContainerView.html','vi
           },
 
           addReadOnlyView: function(todoModel){
-             console.log(todoModel.toJSON());
              var readOnlyView = new ReadOnlyTodo({model: todoModel});
              readOnlyView.on("removeTodo", this.removeTodo, this);
              this.$(".todos").append(readOnlyView.render().el);
@@ -46,7 +37,10 @@ define(['jquery','underscore','backbone','text!views/TodoContainerView.html','vi
 
           clearAllTodos:  function(){
              this.$(".todos").empty();
-             this.collection.reset([]);
+             var self = this;
+             this.collection.removeAll().done(function(){
+                 self.collection.reset([]);
+             });
           },
 
           cancelTodo: function(){

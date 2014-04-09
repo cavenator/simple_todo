@@ -14,10 +14,11 @@ define(['jquery','underscore','backbone','models/Todo','text!views/Todo.html'], 
          e.preventDefault();
          var title = this.$(".todo-title").val();
          var description= this.$(".todo-description").val();
+         var self = this;
          this.model.set({title: title, description: description});
-         this.model.save({title: title, description: description},{async: false}).done(function(){ console.log("model is done saving!")});
-         console.log(this.model.toJSON());
-         this.trigger('todoSaved', this.model);
+         this.model.save({title: title, description: description},{async: false}).done(function(){ 
+             self.trigger('todoSaved', self.model);
+         });
       },
 
       cancelTodo: function(e){

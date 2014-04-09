@@ -39,5 +39,8 @@ public class TodosHttpServlet extends AbstractHttpServlet {
            response.getWriter().write(JsonUtil.toJson(dto));
       }
 
-
+      protected void doDelete( HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+           inMemoryMap.clear();
+	   response.setStatus(HttpServletResponse.SC_OK);
+      }
 }
