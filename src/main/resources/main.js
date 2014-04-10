@@ -7,7 +7,7 @@ require.config({
    }
 });
 
-require(['jquery','underscore', 'router','text'], function($, _, Router){
+require(['jquery','underscore', 'routers/router','text'], function($, _, Router){
    new Router()
    Backbone.history.start({pushState:true});
 });

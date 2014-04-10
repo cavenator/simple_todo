@@ -8,30 +8,44 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class TodoResource extends HttpObject {
-    private Map<String, String> inMemoryMap;
+    private Map<Integer, TodoDto> inMemoryMap;
 
-    public TodoResource(String pathPattern) {
-        super(pathPattern);
-        this.inMemoryMap = new HashMap<String, String>();
-    }
-
-    public TodoResource(String pathPattern, Map<String, String> map){
+    public TodoResource(String pathPattern, Map<Integer, TodoDto> map){
         super(pathPattern);
         this.inMemoryMap = map;
     }
 
     @Override
-    public Response get(Request req) {
-        return super.get(req);    //To change body of overridden methods use File | Settings | File Templates.
-    }
-
-    @Override
-    public Response post(Request req) {
-        return super.post(req);    //To change body of overridden methods use File | Settings | File Templates.
-    }
-
-    @Override
     public Response delete(Request req) {
-        return super.delete(req);    //To change body of overridden methods use File | Settings | File Templates.
+        String id = req.path().valueFor("id");
+        Integer numId;
+        try {
+            numId = Integer.parseInt(id);
+        } catch (Exception e){
+            return BAD_REQUEST(Json(JsonUtil.toJson(new ErrorDto("invalid id: "+id))));
+        }
+
+        TodoDto todo = inMemoryMap.remove(numId);
+        if (todo != null)
+            return NO_CONTENT();
+
+        return BAD_REQUEST(Json(JsonUtil.toJson(new ErrorDto("todo that did not exist prior t DELETE"))));
+    }
+
+    @Override
+    public Response get(Request req) {
+        String id = req.path().valueFor("id");
+        Integer numId;
+        try {
+            numId = Integer.parseInt(id);
+        } catch (Exception e){
+            return BAD_REQUEST(Json(JsonUtil.toJson(new ErrorDto("invalid id: "+id))));
+        }
+
+        TodoDto todo = inMemoryMap.get(numId);
+        if (todo != null)
+            return OK(Json(JsonUtil.toJson(todo)));
+
+        return BAD_REQUEST(Json(JsonUtil.toJson(new ErrorDto("todo does not exist with id: "+id))));
     }
 }

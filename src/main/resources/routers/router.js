@@ -1,4 +1,4 @@
-define(['jquery','underscore','backbone','views/TodosContainerView'], function($,_,Backbone, TodosContainerView){
+define(['jquery','underscore','backbone','../views/TodosContainerView'], function($,_,Backbone, TodosContainerView){
 
     return Backbone.Router.extend({
       initialize: function(){
