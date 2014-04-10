@@ -16,14 +16,14 @@ public class Main {
    public static void main(String[] args) throws Exception {
        Map<Integer, TodoDto> inMemoryMap = new HashMap<Integer, TodoDto>();
 
-       final String RESOURCES_PATH = "src/main/resources/";
+       final String RESOURCES_PATH = "/";
 
        HttpObject rootResource = new HttpObject("/"){
            @Override
            public Response get(Request req) {
                InputStream stream = null;
                try {
-                   stream = new FileInputStream(new File(RESOURCES_PATH + "/index.html"));
+                   stream = getClass().getResourceAsStream("/index.html");
                } catch (Exception e){
                    System.out.println("Can't find index.html");
                }

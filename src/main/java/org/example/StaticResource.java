@@ -22,11 +22,7 @@ public class StaticResource extends HttpObject {
         String rawPath = req.path().valueFor("path");
         InputStream stream = null;
 
-        try{
-            stream = new FileInputStream(new File(resourcesPath+rawPath));
-        } catch (FileNotFoundException fnfe) {
-            System.out.println("can't find resource: "+rawPath);
-        }
+        stream = getClass().getResourceAsStream(this.resourcesPath + rawPath);
 
         if (stream == null)
            return NOT_FOUND();
