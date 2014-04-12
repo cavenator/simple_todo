@@ -66,14 +66,4 @@ public class TodoHttpServlet extends AbstractHttpServlet {
 
           draftResponse(response, response.SC_OK);
       }
-
-      private void draftResponse(HttpServletResponse response, Object obj, int statusCode) throws IOException{
-          draftResponse(response, statusCode);
-          response.getWriter().write(JsonUtil.toJson(obj));
-      }
-
-      private void draftResponse(HttpServletResponse response, int statusCode){
-	  response.setContentType("application/json;charset=utf-8");
-	  response.setStatus(statusCode);
-      }
 }

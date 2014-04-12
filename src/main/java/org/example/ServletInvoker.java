@@ -19,23 +19,12 @@ public class ServletInvoker{
       for (AbstractHttpServlet servlet: servlets){
           if (servlet.matchPath(path)){ 
                 servlet.loadPathVariables(path);
-                invoke(servlet, request, response);
+                servlet.service(request, response);
                 isFound = true;
                 break;
           }
       }
 
       return isFound;
-   }
-
-   private void invoke(AbstractHttpServlet servlet, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-       String method = request.getMethod();
-       if (method.equals("GET")) servlet.get(request, response);
-       else if (method.equals("POST")) servlet.post(request, response);
-       else if (method.equals("PUT")) servlet.put(request, response);
-       else if (method.equals("DELETE")) servlet.delete(request, response);
-       else {
-           response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-       }
    }
 }

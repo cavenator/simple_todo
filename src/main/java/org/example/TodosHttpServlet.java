@@ -25,22 +25,19 @@ public class TodosHttpServlet extends AbstractHttpServlet {
       }
 
       protected void doGet( HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	  response.setContentType("application/json;charset=utf-8");
-	  response.setStatus(HttpServletResponse.SC_OK);
-          response.getWriter().write(JsonUtil.toJson(inMemoryMap.values()));
+          draftResponse(response, inMemoryMap.values(), HttpServletResponse.SC_OK);
       }
 
       protected void doPost( HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
            String requestBody = request.getReader().readLine();
            TodoDto dto = JsonUtil.fromJson(requestBody, TodoDto.class);
            inMemoryMap.put(dto.id, dto);
-	   response.setContentType("application/json;charset=utf-8");
-	   response.setStatus(HttpServletResponse.SC_CREATED);
-           response.getWriter().write(JsonUtil.toJson(dto));
+
+	       draftResponse(response, dto, HttpServletResponse.SC_CREATED);
       }
 
       protected void doDelete( HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
            inMemoryMap.clear();
-	   response.setStatus(HttpServletResponse.SC_OK);
+	       response.setStatus(HttpServletResponse.SC_OK);
       }
 }

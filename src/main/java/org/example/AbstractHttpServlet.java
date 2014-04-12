@@ -1,14 +1,9 @@
 package org.example;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.HashMap;
+import java.util.*;
 
 public abstract class AbstractHttpServlet extends HttpServlet {
 
@@ -61,21 +56,15 @@ public abstract class AbstractHttpServlet extends HttpServlet {
          }
    }
 
-   public void get(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-      doGet(request, response);
-   }
+    protected void draftResponse(HttpServletResponse response, Object obj, int statusCode) throws IOException {
+        draftResponse(response, statusCode);
+        response.getWriter().write(JsonUtil.toJson(obj));
+    }
 
-   public void post(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-      doPost(request, response);
-   }
-
-   public void put(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-      doPut(request, response);
-   }
-
-   public void delete(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-      doDelete(request, response);
-   }
+    protected void draftResponse(HttpServletResponse response, int statusCode){
+        response.setContentType("application/json;charset=utf-8");
+        response.setStatus(statusCode);
+    }
 
    public String getPath(){
       return path;
