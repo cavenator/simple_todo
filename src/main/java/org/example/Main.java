@@ -4,6 +4,8 @@ import org.httpobjects.HttpObject;
 import org.httpobjects.Request;
 import org.httpobjects.Response;
 import org.httpobjects.jetty.HttpObjectsJettyHandler;
+import org.httpobjects.util.ClasspathResourceObject;
+import org.httpobjects.util.ClasspathResourcesObject;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -18,22 +20,12 @@ public class Main {
 
        final String RESOURCES_PATH = "/";
 
-       HttpObject rootResource = new HttpObject("/"){
-           @Override
-           public Response get(Request req) {
-               InputStream stream = null;
-               try {
-                   stream = getClass().getResourceAsStream("/index.html");
-               } catch (Exception e){
-                   System.out.println("Can't find index.html");
-               }
-               return OK(Bytes("text/html", stream));
-           }
-       };
+       ClasspathResourceObject rootResource = new ClasspathResourceObject(RESOURCES_PATH,"/index.html", Main.class);
        TodosResource todosResource = new TodosResource("/todo", inMemoryMap);
        TodoResource todoResource = new TodoResource("/todo/{id}", inMemoryMap);
-       StaticResource staticResource = new StaticResource("/{path*}", RESOURCES_PATH);
-       HttpObjectsJettyHandler.launchServer(8080, rootResource, todosResource, todoResource, staticResource);
+       ClasspathResourcesObject staticResources = new ClasspathResourcesObject("/{resource*}", Main.class, RESOURCES_PATH);
+
+       HttpObjectsJettyHandler.launchServer(8080, rootResource, todosResource, todoResource, staticResources);
    }
 
 }
