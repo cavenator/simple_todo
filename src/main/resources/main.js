@@ -1,13 +1,4 @@
-require.config({
-   paths: {
-     "jquery"      : "https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min",
-     "underscore"  : "lib/underscore",
-     "backbone"    : "lib/backbone",
-     "text"        : "lib/plugins/text"
-   }
-});
-
-require(['jquery','underscore', 'routers/router','text'], function($, _, Router){
+require(['jquery','underscore', 'backbone','routers/router'], function($, _, Backbone, Router){
    new Router()
    Backbone.history.start({pushState:true});
 });
