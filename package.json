@@ -18,5 +18,8 @@
   "homepage": "https://github.com/cavenator/simple_todo#readme",
   "dependencies": {
     "text-loader": "0.0.1"
+  },
+  "devDependencies": {
+    "webpack": "2.1.0-beta.21"
   }
 }
